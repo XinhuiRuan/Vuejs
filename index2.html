@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>计算属性和监视</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <!--
+        1. 计算属性
+            在computed属性对象中定义计算属性的方法
+            在页面中使用{{方法名}}来显示计算的结果
+        2. 监视属性
+            通过vm对象的$watch或watch配置来监视指定的属性
+            当属性变化时，回调函数自动调用，在函数内部进行计算
+        3. 计算属性高级
+            通过getter/setter实现对属性数据的显示和监视（实现双向绑定）
+            计算属性存在缓存，多次读取只执行一次getter计算
+
+            getter: 属性的get方法
+            setter: 属性的set方法
+    -->
+    <div id="app">
+        姓：<input type="text" placeholder="First Name" v-model="First"><br>
+        名：<input type="text" placeholder="Last Name" v-model="Last"><br>
+        姓名1（单向）：<input type="text" placeholder="Full Name1" v-model="Full1"><br>
+        姓名2（单向）：<input type="text" placeholder="Full Name2" v-model="Full2"><br>
+        姓名3（双向）：<input type="text" placeholder="Full Name3" v-model="Full3"><br>
+        <p>{{Full3}}</p> <!--存在缓存,Full3()函数只执行一次-->
+        <p>{{Full3}}</p>
+    </div>
+    
+ <script>
+     var vm = new Vue({
+        el:"#app",
+        data:{
+            First:"Ruan",
+            Last:"Xinhui",
+            Full2:""
+        },
+        computed:{
+            // 什么时候执行：初始化显示/相关的data属性数据发生改变
+            Full1(){ //计算属性中的一个方法，方法的返回值作为属性值
+                //console.log("Full1执行");
+                return this.First+" "+this.Last;
+            },
+
+            Full3:{
+                //回调函数特征：1. 是自己定义的；2. 自己没有调用；3. 回调函数自己调用执行
+                // 回调函数需要明白两件事：什么时候调用？用来做什么？
+                // get()回调函数 当需要读取当前属性值时回调，根据相关的数据计算并返回当前属性的值
+                get(){
+                    console.log("Full1 get()");
+                    return this.First+" "+this.Last;
+                },
+                // set()回调函数，当属性值发生改变时回调，更新相关的属性数据
+                set(value){
+                    var arr = value.split(' ');
+                    this.First = arr[0];
+                    this.Last = arr[1];
+                }
+            }
+        },
+        watch:{
+            First:function(newValue,oldValue){
+                this.Full2 = newValue+" "+this.Last;
+            }
+        }
+     });
+
+     vm.$watch("Last",function(newValue,oldValue){
+            this.Full2 = this.First+" "+newValue;
+     })
+</script>   
+</body>
+</html>

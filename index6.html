@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单数据的自动收集</title>
+    <script src="../vue.js"></script>
+   
+</head>
+<body>
+   
+    <div id="app">
+        <form action="/xxx" @submit.prevent="handleSubmit">
+            <span>用户名: </span>
+            <input type="text" v-model="username"><br>
+
+            <span>密码：</span>
+            <input type="password" v-model="pwd"><br>
+
+            <span>性别：</span>
+            <input type="radio" id="female" v-model="sex" value="女">
+            <label for="female">女</label>
+            <input type="radio" id="male" v-model="sex" value="男">
+            <label for="male">男</label><br>
+
+            <span>爱好：</span>
+            <input type="checkbox" id="basketball" v-model="likes" value="篮球">
+            <label for="basketball">篮球</label>
+            <input type="checkbox" id="football" v-model="likes" value="足球">
+            <label for="football">足球</label>
+            <input type="checkbox" id="pingpang" v-model="likes" value="乒乓球">
+            <label for="pingpang">乒乓球</label><br>
+
+            <span>城市：</span>
+            <select v-model="cityId">
+                <option value="">未选择</option>y
+                <option :value="city.id" v-for="(city,index) in allCitys" :key="index">{{city.name}}</option>
+            </select><br>
+            <span>介绍：</span>
+            <textarea name="" id="" cols="30" rows="10" v-model="des"></textarea><br><br>
+
+            <input type="submit" value="注册" >
+        </form>
+    </div>
+    
+ <script>
+     
+     var vm = new Vue({
+        el:"#app",
+        data:{
+            username:"",
+            pwd:"",
+            sex:"女",
+            likes:["篮球","足球"],
+            allCitys:[
+                {id:1,name:'BJ'},
+                {id:2,name:'SH'},
+                {id:3,name:'GZ'},
+            ],
+            cityId:"1",
+            des:"内容不能为空"
+        },
+        methods:{
+            handleSubmit(){
+                console.log(this.username,this.pwd,this.sex,this.likes,this.allCitys,this.cityId,this.des);
+            }
+         },
+         computed:{  
+           
+            
+         },
+ 
+     });
+
+</script>   
+</body>
+</html>

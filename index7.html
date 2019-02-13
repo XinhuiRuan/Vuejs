@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>生命周期</title>
+    <script src="../vue.js"></script>
+   
+</head>
+<body>
+    <!--vue对象的生命周期回调函数：
+       第一阶段（初始化）： beforeCreate -- created -- beforeMount -- Mounted （常用） // 发送ajax请求获取数据，启动定时器等异步任务
+       第二阶段（更新）：beforeUpdate -- updated
+       第三阶段（销毁）：beforeDestroy（常用） -- destroyed  // 做收尾工作，比如清除定时器
+    -->
+    <div id="app">
+       <button @click="destroyVM">destroy me</button> <br>
+
+       <span v-show="isShow">IT教育</span>
+       
+    </div>
+    
+ <script>
+     
+     var vm = new Vue({
+        el:"#app",
+        data:{
+            isShow: true
+        },
+
+        beforeCreate(){
+            console.log('beforeCreate()');
+        },
+
+        created(){
+            console.log('created()');
+        },
+
+        beforeMount(){
+            console.log('beforeMount()');
+        },
+
+        // el中的innerHTML模板内容先在内存中被全部编译完，在批量1次塞到页面更新页面，
+        // 塞到页面前的生命周期函数是beforeMount，返回后是mounted。
+        //初始化显示之后立即调用（回调函数，只调用1次，用的最多的生命周期函数之一）
+        mounted(){ 
+            console.log('mounted()');
+            this.intervalId = setInterval(() => { //箭头函数，内部没有this,用外部的this
+                console.log('------');
+                this.isShow = !this.isShow;
+            },1000);
+        },
+
+        beforeUpdate(){
+            console.log('beforeUpdate()');
+        },
+
+        updated(){
+            console.log('updated()');
+        },
+
+        // vm被摧毁前立即调用（回调函数，只调用1次，用的最多的生命周期函数之一）
+        beforeDestroy(){ 
+            console.log('beforeDestroy()');
+            // 清除定时器
+            clearInterval(this.intervalId);
+        },
+
+        destroyed(){
+            console.log('destroyed()');
+        },
+
+        methods:{
+            destroyVM(){
+                // 摧毁vm
+                // 有问题（定时器还在跑，因为内存泄漏），要清除定时器
+                this.$destroy(); 
+            }
+        }
+     });
+</script>   
+</body>
+</html>

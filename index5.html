@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>事件处理</title>
+    <script src="../vue.js"></script>
+   
+</head>
+<body>
+   
+    <div id="app">
+       <h2>1. 绑定监听</h2>
+        <button @click="test1()">test</button>
+        <button @click="test2('abc')">test</button>
+        <button @click="test3">test</button>
+        <button @click="test4(123,$event)">test</button>
+
+       <h2>2. 事件修饰符</h2>
+        <div style="width:200px;height:200px;background: red" @click="test5">
+            <!-- 停止事件冒泡 -->
+            <div style="width:100px;height:100px;background: green" @click.stop="test6"></div> 
+        </div>
+         
+        <!-- 阻止事件默认行为 -->
+        <a href="http://www.baidu.com" @click.prevent="test7">去百度</a>
+
+        <h2>3. 按键修饰符</h2>
+            <input type="text" @keyup.13="test8">
+            <input type="text" @keyup.enter="test8">
+    </div>
+    
+ <script>
+     
+     var vm = new Vue({
+        el:"#app",
+        data:{
+          test1(){
+              alert('ok');
+          },
+          test2(msg){
+            alert(msg);
+          },
+          test3(event){
+            alert(event.target.innerHTML);
+          },
+          test4(num,event){
+            alert(num+event.target.innerHTML);
+          },
+
+          test5(){
+              alert('out');
+          },
+          test6(event){
+              //event.stopPropagation();
+              alert('inner');
+          },
+          test7(event){
+              //event.preventDefault();
+              alert('点击了');
+          },
+
+          test8(event){
+              //if(event.keyCode === 13){
+                alert(event.target.value);
+              //}
+          }
+        },
+        methods:{
+         
+         },
+         computed:{  
+           
+            
+         },
+ 
+     });
+
+</script>   
+</body>
+</html>
